@@ -14,13 +14,17 @@ void can_comm_task_fun(void *argument) {
                                      .TxFrameType = FDCAN_DATA_FRAME,
                                      .DataLength = FDCAN_DLC_BYTES_4};
 
-  // Transmit the message.
-  if (HAL_FDCAN_AddMessageToTxFifoQ(&hfdcan1, &tx_header, msg) != HAL_OK) {
-    Error_Handler();
-  }
+  
   /* Infinite loop */
   for (;;) {
     tick = osKernelGetTickCount();
+
+    // Transmit the message.
+    if (HAL_FDCAN_AddMessageToTxFifoQ(&hfdcan1, &tx_header, msg) != HAL_OK) {
+      Error_Handler();
+    }
+
+    msg[0]++;
 
     osDelayUntil(tick + 1000);
   }
@@ -32,7 +36,7 @@ void HAL_FDCAN_RxFifo0Callback(FDCAN_HandleTypeDef *hfdcan,
                                uint32_t RxFifo0ITs) {
   if (RxFifo0ITs & FDCAN_IT_RX_FIFO0_NEW_MESSAGE) {
     FDCAN_RxHeaderTypeDef rx_header;
-    uint8_t rx_data[4]; // Max data length for CAN FD is 64 bytes.
+    uint8_t rx_data[4];
 
     if (HAL_FDCAN_GetRxMessage(hfdcan, FDCAN_RX_FIFO0, &rx_header, rx_data) !=
         HAL_OK) {
