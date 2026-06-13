@@ -38,9 +38,11 @@ void HAL_FDCAN_RxFifo0Callback(FDCAN_HandleTypeDef *hfdcan,
         HAL_OK) {
       Error_Handler();
     }
-
-    for (int i = 0; i < 4; i++) {
-      recv_buf[i] = rx_data[i];
+    
+    if (rx_header.Identifier == REMOTE_ID) {
+      for (int i = 0; i < 4; i++) {
+        recv_buf[i] = rx_data[i];
+      }
     }
 
     // Process the received message (for example, print it or toggle an LED).
