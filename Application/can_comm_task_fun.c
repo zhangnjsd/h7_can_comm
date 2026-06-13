@@ -25,18 +25,20 @@ void HAL_FDCAN_RxFifo0Callback(FDCAN_HandleTypeDef *hfdcan,
         HAL_OK) {
       Error_Handler();
     } else {
+      if (rx_header.Identifier == REMOTE_ID) {
+        // Send any messages.
+        rx_data[0] += 1;
 
-      // Send any messages.
-      rx_data[0] += 1;
+        FDCAN_TxHeaderTypeDef tx_header = {.Identifier = LOCAL_ID,
+                                           .IdType = FDCAN_STANDARD_ID,
+                                           .TxFrameType = FDCAN_DATA_FRAME,
+                                           .DataLength = FDCAN_DLC_BYTES_4};
 
-      FDCAN_TxHeaderTypeDef tx_header = {.Identifier = LOCAL_ID,
-                                         .IdType = FDCAN_STANDARD_ID,
-                                         .TxFrameType = FDCAN_DATA_FRAME,
-                                         .DataLength = FDCAN_DLC_BYTES_4};
-
-      // Transmit the message.
-      if (HAL_FDCAN_AddMessageToTxFifoQ(&hfdcan1, &tx_header, rx_data) != HAL_OK) {
-        Error_Handler();
+        // Transmit the message.
+        if (HAL_FDCAN_AddMessageToTxFifoQ(&hfdcan1, &tx_header, rx_data) !=
+            HAL_OK) {
+          Error_Handler();
+        }
       }
     }
 
