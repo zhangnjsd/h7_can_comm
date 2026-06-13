@@ -60,7 +60,7 @@ const osThreadAttr_t CANCommTaskFun_attributes = {
   .priority = (osPriority_t) osPriorityNormal,
 };
 /* USER CODE BEGIN PV */
-
+uint8_t recv_buf[4];
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
