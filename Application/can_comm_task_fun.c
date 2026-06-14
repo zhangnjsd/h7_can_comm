@@ -56,8 +56,6 @@ void HAL_FDCAN_RxFifo0Callback(FDCAN_HandleTypeDef *hfdcan,
   if (HAL_FDCAN_GetRxMessage(&hfdcan1, FDCAN_RX_FIFO0, &rx_header, rx_data) ==
       HAL_OK) {
 
-    // Check if the message is from the remote ID and has the correct data
-    // length.
     if (rx_header.Identifier >= 0x205 && rx_header.Identifier <= 0x208) {
       for (int i = 0; i < 8; i++) {
         recv_buf[i] = rx_data[i];
