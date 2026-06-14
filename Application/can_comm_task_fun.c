@@ -19,26 +19,25 @@ void HAL_FDCAN_RxFifo0Callback(FDCAN_HandleTypeDef *hfdcan,
                                uint32_t RxFifo0ITs) {
   if (RxFifo0ITs & FDCAN_IT_RX_FIFO0_NEW_MESSAGE) {
     FDCAN_RxHeaderTypeDef rx_header;
-    uint8_t rx_data[4]; // Max data length for CAN FD is 64 bytes.
+    uint8_t rx_data[4];
 
     if (HAL_FDCAN_GetRxMessage(hfdcan, FDCAN_RX_FIFO0, &rx_header, rx_data) !=
         HAL_OK) {
       Error_Handler();
-    } else {
-      if (rx_header.Identifier == REMOTE_ID) {
-        // Send any messages.
-        rx_data[0] += 1;
+    }
+    if (rx_header.Identifier == REMOTE_ID) {
+      // Send any messages.
+      rx_data[0] += 1;
 
-        FDCAN_TxHeaderTypeDef tx_header = {.Identifier = LOCAL_ID,
-                                           .IdType = FDCAN_STANDARD_ID,
-                                           .TxFrameType = FDCAN_DATA_FRAME,
-                                           .DataLength = FDCAN_DLC_BYTES_4};
+      FDCAN_TxHeaderTypeDef tx_header = {.Identifier = LOCAL_ID,
+                                         .IdType = FDCAN_STANDARD_ID,
+                                         .TxFrameType = FDCAN_DATA_FRAME,
+                                         .DataLength = FDCAN_DLC_BYTES_4};
 
-        // Transmit the message.
-        if (HAL_FDCAN_AddMessageToTxFifoQ(&hfdcan1, &tx_header, rx_data) !=
-            HAL_OK) {
-          Error_Handler();
-        }
+      // Transmit the message.
+      if (HAL_FDCAN_AddMessageToTxFifoQ(&hfdcan1, &tx_header, rx_data) !=
+          HAL_OK) {
+        Error_Handler();
       }
     }
 
