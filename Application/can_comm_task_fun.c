@@ -9,7 +9,7 @@ void can_comm_task_fun(void *argument) {
   // Send any messages.
   uint8_t msg[] = {1, 0, 0, 0};
 
-  FDCAN_TxHeaderTypeDef tx_header = {.Identifier = REMOTE_ID,
+  FDCAN_TxHeaderTypeDef tx_header = {.Identifier = LOCAL_ID,
                                      .IdType = FDCAN_STANDARD_ID,
                                      .TxFrameType = FDCAN_DATA_FRAME,
                                      .DataLength = FDCAN_DLC_BYTES_4};
