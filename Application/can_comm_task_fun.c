@@ -44,10 +44,10 @@ void HAL_FDCAN_RxFifo0Callback(FDCAN_HandleTypeDef *hfdcan,
     }
     
     if (rx_header.Identifier == REMOTE_ID) {
-      for (int i = 0; i < 4; i++) {
-        recv_buf[i] = rx_data[i];
-      }
+      recv_buf[0] = rx_data[0];
     }
+
+    recv_buf[1] ++;
 
     // Process the received message (for example, print it or toggle an LED).
   }
