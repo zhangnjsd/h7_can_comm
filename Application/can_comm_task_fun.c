@@ -25,11 +25,11 @@ void HAL_FDCAN_RxFifo0Callback(FDCAN_HandleTypeDef *hfdcan,
         HAL_OK) {
       Error_Handler();
     }
-    if (rx_header.Identifier == REMOTE_ID) {
+    if (rx_header.Identifier == LOCAL_ID) {
       // Send any messages.
       rx_data[0] += 1;
 
-      FDCAN_TxHeaderTypeDef tx_header = {.Identifier = LOCAL_ID,
+      FDCAN_TxHeaderTypeDef tx_header = {.Identifier = REMOTE_ID,
                                          .IdType = FDCAN_STANDARD_ID,
                                          .TxFrameType = FDCAN_DATA_FRAME,
                                          .DataLength = FDCAN_DLC_BYTES_4};
